@@ -1,0 +1,30 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Env files
+.env
+.env.*
+
+# Logs
+logs/
+*.log
+
+# Vite
+dist/
+.vite/
+
+# React
+*.local
+.DS_Store
+coverage/
+
+# OS junk
+Thumbs.db
+*.swp
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
