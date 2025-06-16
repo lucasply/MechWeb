@@ -1,5 +1,5 @@
 const express = require('express');
-const pool = require('./db');
+const pool = require('../db');
 const router = express.Router();
 
 // Admin-only route - add validation later
