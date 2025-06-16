@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import InventoryPage from './pages/InventoryPage';
 import RequestPage from './pages/RequestPage';
 import AdminPage from './pages/AdminPage';
+import AdminRequestsPage from './pages/AdminRequestsPage';
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <Link to="/inventory" style={{ marginRight: '1rem', color: 'white' }}>Inventory</Link>
         <Link to="/request" style={{ marginRight: '1rem', color: 'white' }}>Request Part</Link>
         <Link to="/admin" style={{ color: 'white' }}>Admin Dashboard</Link>
+        <Link to="/admin/requests" style={{ marginLeft: '1rem', color: 'white' }}>Admin Requests</Link>
       </nav>
 
       <Routes>
@@ -20,6 +22,7 @@ export default function App() {
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/request" element={<RequestPage />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/requests" element={<AdminRequestsPage />} />
       </Routes>
     </Router>
   );

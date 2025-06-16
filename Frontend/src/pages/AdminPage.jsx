@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './styles.css';
 
 export default function AdminPage() {
   const [partName, setPartName] = useState('');
@@ -29,7 +30,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div className="container">
       <h2>Admin Dashboard - Add Inventory Part</h2>
 
       {message && <p>{message}</p>}
@@ -45,19 +46,14 @@ export default function AdminPage() {
           />
         </label>
 
-        <br /><br />
-
         <label>
           Description:
           <textarea
             value={description}
             onChange={e => setDescription(e.target.value)}
             rows={3}
-            cols={50}
           />
         </label>
-
-        <br /><br />
 
         <label>
           Stock Quantity:
@@ -70,8 +66,6 @@ export default function AdminPage() {
           />
         </label>
 
-        <br /><br />
-
         <label>
           Can Order:
           <input
@@ -80,8 +74,6 @@ export default function AdminPage() {
             onChange={e => setCanOrder(e.target.checked)}
           />
         </label>
-
-        <br /><br />
 
         <button type="submit">Add Part</button>
       </form>
