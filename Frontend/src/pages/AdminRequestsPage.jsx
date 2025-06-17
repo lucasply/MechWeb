@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './AdminRequestsPage.css';
+import './css/AdminRequestsPage.css';
 
 export default function AdminRequestsPage() {
   const [requests, setRequests] = useState([]);

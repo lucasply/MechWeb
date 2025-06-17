@@ -29,6 +29,9 @@ export default function InventoryPage() {
           <thead>
             <tr>
               <th>Part Name</th>
+              <th>Make</th>
+              <th>Model</th>
+              <th>Year</th>
               <th>Description</th>
               <th>Stock</th>
               <th>Can Order</th>
@@ -38,6 +41,9 @@ export default function InventoryPage() {
             {parts.map(part => (
               <tr key={part.id}>
                 <td>{part.part_name}</td>
+                <td>{part.make}</td>
+                <td>{part.model}</td>
+                <td>{part.year}</td>
                 <td>{part.description}</td>
                 <td>{part.stock}</td>
                 <td>{part.can_order ? 'Yes' : 'No'}</td>

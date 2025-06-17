@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 const xss = require('xss');
+const authenticateToken = require('../middleware/authenticateToken');
 
 // Submit a new request
 router.post('/', async (req, res) => {
@@ -22,9 +23,11 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post('/new-part', async (req, res) => {
+router.post('/new-part', authenticateToken, async (req, res) => {
   try {
-    const user_id = req.body.user_id; // you can implement auth later
+    console.log('New part request body:', req.body);
+    
+    const user_id = req.user.userId; 
     const make = xss(req.body.make?.trim() || '');
     const model = xss(req.body.model?.trim() || '');
     const year = xss(req.body.year?.trim() || '');
@@ -70,15 +73,18 @@ router.patch('/:id/status', async (req, res) => {
   }
 
   try {
-    await pool.query(
-      'UPDATE requests SET status = ? WHERE id = ?',
-      [status, id]
-    );
-    res.json({ message: 'Status updated successfully' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to update status' });
+    if (status === 'cancelled') {
+      await pool.query('DELETE FROM requests WHERE id = ?', [id]);
+    } else {
+      await pool.query('UPDATE requests SET status = ? WHERE id = ?', [status, id]);
+    }
+    res.json({ message: 'Request updated successfully' });
+  } 
+  catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to update request' });
   }
 });
+
 
 module.exports = router;

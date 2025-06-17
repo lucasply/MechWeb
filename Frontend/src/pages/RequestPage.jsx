@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './RequestPage.css';
+import './css/RequestPage.css';
+import { useAuth } from '../auth/AuthProvider'; 
+import Modal from '../Components/Modal'; 
+import { Link } from 'react-router-dom';
 
 export default function RequestPage() {
   const [parts, setParts] = useState([]);
@@ -11,8 +14,11 @@ export default function RequestPage() {
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
   const [description, setDescription] = useState('');
+  const [description1, setDescription1] = useState('');
   const [message, setMessage] = useState('');
 
+  const { user } = useAuth();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   useEffect(() => {
     let filtered = parts;
@@ -34,29 +40,51 @@ export default function RequestPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!user) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
     try {
+      const token = localStorage.getItem('token');
       await axios.post('/api/requests', {
         part_id: selectedPart,
-        description,
-        // Include user id from auth here if you add login
+        description: description1,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+
       setMessage('Request submitted successfully!');
       setSelectedPart('');
-      setDescription('');
+      setDescription1('');
     } catch (err) {
       setMessage('Failed to submit request.');
     }
   };
+
+  
   const handleNewPartRequest = async (e) => {
     e.preventDefault();
 
+    if (!user) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
     try {
+      const token = localStorage.getItem('token');
       await axios.post('/api/requests/new-part', {
         part_name: newPartName,
         make,
         model,
         year,
         description,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       setMessage('New part request submitted successfully!');
@@ -132,8 +160,8 @@ export default function RequestPage() {
             <label>
               Description:
               <textarea
-                value={description}
-                onChange={e => setDescription(e.target.value)}
+                value={description1}
+                onChange={e => setDescription1(e.target.value)}
                 rows={4}
                 cols={50}
                 placeholder="Details about the new part"
@@ -211,6 +239,14 @@ export default function RequestPage() {
 
         <button type="submit">Request New Part</button>
       </form>
+      
+      <Modal isOpen={showLoginPrompt} onClose={() => setShowLoginPrompt(false)}>
+        <p>You must be logged in to submit a request.</p>
+        <p>
+          Please <Link to="/login" onClick={() => setShowLoginPrompt(false)}>Login</Link> or{' '}
+          <Link to="/register" onClick={() => setShowLoginPrompt(false)}>Register</Link>.
+        </p>
+      </Modal>
 
     </div>
   );
